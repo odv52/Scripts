@@ -1,0 +1,46 @@
+import requests
+import urllib3  # чтоб обойти проверку сертификатов по HTTPS (не рекомендуется в проде)
+import time
+
+list = [
+    372XXXXX,
+    372XXXXX
+]
+
+
+def rbt(list):
+    for i in list:
+        i = str(i)
+        # CL
+        # url = 'https://xml2.XXXXX.com/tsim_xml/service/xmlgate?uname=XXXXX&upass=XXXXX&plain=1&command' \
+        #       '=cancel_location_new&onum=' + i + ''
+
+        # SMS Service disable
+        # url = 'https://xml2.XXXXX.com/tsim_xml/service/xmlgate?uname=XXXXX&upass=XXXXX&plain=1&command=srvsms' \
+        #       '&active=status&onum=' + i + ''
+
+        # # SMS
+        url = 'https://sendsms.XXXX.ee/smsc?username=XXXXX&password=XXXXX&from=37259500001&to' \
+            '=' + i + '&text=testsms&coding=0&mclass=1&dlr-mask=3 '
+
+        # Stats
+        # url = 'https://xml2.travelsim.com/tsim_xml/service/xmlgate?uname=LDp2k1W&upass=q9L3Wpsv8&plain=1&command=card_stat&msisdn=' + i + ''
+
+        # Создаем номера на PCRF без пакета и активации для UTT-TravelChat (15801)
+        # url = 'http://10.22.2.243:9900/pcrf/xmlgate?plain=1&command=create_user&msisdn=' + i + '&accfile=15801'
+        # Активируем пакет Messaging 1
+        # url = 'https://xml2.XXXXX.com/tsim_xml/service/xmlgate?uname=XXXXX&upass=XXXXX&onum=' + i + '' \
+        #                                     '&activate=yes&packettype=dailygprs&command=discount&plain=1&packetid=1'
+
+        # PNL T-Mobile USA 310260
+        # url = 'http://10.32.2.150:8088/otasms?msisdn=' + i + '&command=change_pnl&applet=full&pnldata=310260'
+
+        print(url)
+        urllib3.disable_warnings()  # отключим InsecureRequestWarning
+        request = requests.get(url, verify=False)
+        response = request.text
+        print(response)  # Получаем полностью страничку
+        # time.sleep(10)
+
+
+rbt(list)
